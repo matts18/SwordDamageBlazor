@@ -1,52 +1,68 @@
 ﻿using System;
-using System.Diagnostics;
-
 namespace BlazorSwordDamage
 {
     class SwordDamage
     {
+        /// <summary>
+        /// Base damage used in the CalculateDamage method
+        /// </summary>
         public const int BASE_DAMAGE = 3;
+
+        /// <summary>
+        /// Flame damage used in the CalculateDamange method
+        /// </summary>
         public const int FLAME_DAMAGE = 2;
 
-        public int Roll;
-        public decimal MagicMultiplier = 1M;
-        public int FlamingDamage = 0;
-        public int Damage;
+        public int Damage { get; private set; }
 
-        public SwordDamage()
+        private int roll;
+        public int Roll
         {
-            Debug.WriteLine("Created an instance of SwordDamage");
+            get { return roll; }
+            set
+            {
+                roll = value;
+                CalculateDamage();
+            }
         }
 
-        public void CalculateDamage()
+        private bool flaming;
+        public bool Flaming
         {
-            Damage = (int)(Roll * MagicMultiplier) + BASE_DAMAGE + FlamingDamage;
-            Debug.WriteLine($"CalculateDamage finished: {Damage} (roll: {Roll})");
+            get { return flaming; }
+            set
+            {
+                flaming = value;
+                CalculateDamage();
+            }
+        }
+
+        private bool magic;
+        public bool Magic
+        {
+            get { return magic; }
+            set
+            {
+                magic = value;
+                CalculateDamage();
+            }
+        }
+
+
+        public SwordDamage(int roll)
+        {
+            this.roll = roll;
+        }
+
+        private void CalculateDamage()
+        {
+            double magicMultiplier = 1;
+
+            if (Magic) magicMultiplier = 1.75;
+            Damage = (int)(Roll * magicMultiplier) + BASE_DAMAGE;
+            if (Flaming) Damage += FLAME_DAMAGE;
         }   
 
-        public void SetMagic(bool isMagic)
-        {
-            if(isMagic)
-            {
-                MagicMultiplier = 1.75M;
-            }
-            else
-            {
-                MagicMultiplier = 1M;
-            }
-            CalculateDamage();
-            Debug.WriteLine($"SetMagic finished: {Damage} (roll: {Roll})");
-        }
-
-        public void SetFlaming(bool isFlaming)
-        {
-            CalculateDamage();
-            if(isFlaming)
-            {
-                Damage += FLAME_DAMAGE;
-            }
-            Debug.WriteLine($"SetFlaming finished: {Damage} (roll: {Roll})");
-        }
 
     }
 }

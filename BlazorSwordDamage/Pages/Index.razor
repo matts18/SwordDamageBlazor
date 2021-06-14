@@ -3,11 +3,11 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-3 text-left">
-            <input type="checkbox" class="form-check-input" id="flaming" @onchange="UpdateFlaming"/>
+            <input type="checkbox" class="form-check-input" id="flaming" @bind="swordDamage.Flaming"/>
             <label class="form-check-label" for="flaming">Flaming</label>
         </div>
         <div class="col-3 text-right">
-            <input type="checkbox" form="form-check-input" id="magic" @onchange="UpdateMagic"/>
+            <input type="checkbox" form="form-check-input" id="magic" @bind="swordDamage.Magic"/>
             <label class="form-check-label" for="magic">Magic</label>
 
         </div>
@@ -20,7 +20,7 @@
     <div class="row justify-content-center mt-5">
 
     <div class="col-6 text-center">
-        <h3>@damageText</h3>
+        <h3> Rolled @swordDamage.Roll for @swordDamage.Damage HP</h3>
     </div>
     </div>
 </div>
@@ -28,38 +28,20 @@
 @code
 {
     Random random = new Random();
-    SwordDamage swordDamage = new SwordDamage();
-    string damageText = "";
+    SwordDamage swordDamage = new SwordDamage(0);
+
 
     protected override void OnInitialized()
     {
-        swordDamage.SetMagic(false);
-        swordDamage.SetFlaming(false);
+        swordDamage.Magic = false;
+        swordDamage.Flaming = false;
         RollDice();
     }
 
-    void UpdateFlaming(ChangeEventArgs e)
-    {
-        swordDamage.SetFlaming((bool) e.Value);
-        DisplayDamage();
-    }
-
-    void UpdateMagic(ChangeEventArgs e)
-    {
-        swordDamage.SetMagic((bool)e.Value);
-        DisplayDamage();
-    }
-
-    void DisplayDamage()
-    {
-        damageText = $"Rolled {swordDamage.Roll} for {swordDamage.Damage} HP";
-    }
 
     void RollDice()
     {
-        swordDamage.Roll = random.Next(1, 7) + random.Next(1, 7) + random.Next(1, 7);
-        swordDamage.CalculateDamage();
-        DisplayDamage();
+         swordDamage.Roll = random.Next(1, 7) + random.Next(1, 7) + random.Next(1, 7);
     }
 
 }
